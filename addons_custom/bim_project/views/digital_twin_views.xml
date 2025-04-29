@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id='view_bim_digital_twin_form' model='ir.ui.view'>
+        <field name='name'>bim.digital_twin.form</field>
+        <field name='model'>bim.digital_twin</field>
+        <field name='arch' type='xml'>
+            <form string='BIM Digital Twin'>
+                <sheet>
+                    <group>
+                        <field name='name'/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

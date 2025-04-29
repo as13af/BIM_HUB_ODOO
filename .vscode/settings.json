@@ -1,0 +1,13 @@
+{
+    "python.analysis.typeCheckingMode": "standard",
+    "python.analysis.extraPaths": [
+        "C:/Program Files/Odoo 16.0.20250218/server/odoo/addons", 
+        "F:/bimodoo/addons_custom"
+    ],
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+    "python.languageServer": "None"
+}

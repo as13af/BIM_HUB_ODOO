@@ -1,0 +1,38 @@
+bim_project/
+├── __init__.py
+├── __manifest__.py
+├── models/
+│   ├── __init__.py
+│   ├── project.py
+│   ├── issue.py
+│   ├── document.py
+│   └── digital_twin.py
+├── views/
+│   ├── project_views.xml
+│   ├── issue_views.xml
+│   ├── document_views.xml
+│   └── digital_twin_views.xml
+├── security/
+│   ├── ir.model.access.csv
+│   └── security.xml
+├── data/
+│   ├── project_data.xml
+│   └── issue_data.xml
+├── static/
+│   └── src/
+│       ├── js/
+│       │   └── bim_viewer.js
+│       ├── css/
+│       │   └── styles.css
+│       └── img/
+│           └── icon.png
+├── controllers/
+│   └── __init__.py
+├── report/
+│   └── issue_report.xml
+├── wizard/
+│   └── __init__.py
+├── i18n/
+│   └── en.po
+└── tests/
+    └── test_bim_project.py
