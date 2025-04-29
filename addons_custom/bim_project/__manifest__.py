@@ -1,35 +1,44 @@
-# -*- coding: utf-8 -*-
 {
-    'name': "bim_project",
-
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
-    'description': """
-        Long description of module's purpose
-    """,
-
-    'author': "My Company",
-    'website': "https://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
-    # any module necessary for this one to work correctly
-    'depends': ['base'],
-
-    # always loaded
+    'name': 'BIM HUB Odoo',
+    # 'name': 'ASTIL SAMA - c:\Users\PC\Downloads\wmremove-transformed (1).png ',
+    'version': '1.0',
+    'depends': [
+        'base',
+        'sale',
+        'stock',
+        'project',
+        'hr',
+        'mrp',
+        'web',
+        'contacts',
+        'uom',  # Add this line to depend on the uom module
+    ],
+    'author': 'Ali Shidqie Al Faruqi',
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'views/digital_twin_views.xml',
+        'views/document_views.xml',
+        'views/issue_views.xml',
+        'views/project_views.xml',
+        
+        # 'views/bim_change_log_views.xml',
+        # 'views/bim_cost_estimate_views.xml',
+        # 'views/bim_element_views.xml',
+        # 'views/bim_model_views.xml',
+        # 'views/bim_inspection_views.xml',
+        # 'views/bim_material_views.xml',
+        # 'views/bim_project_views.xml',
+        # 'views/bim_task_views.xml',
+        # 'views/js_template_views.xml',
+
     ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+    'images': ['static/description/icon.png'],
+    'installable': True,
+    'application': True,
+    'assets': {
+        'web.assets_backend': [
+            'bim_project/static/src/components/**/*.js',  # ✅ All JS files in "components" & subfolders
+            'bim_project/static/src/components/**/*.xml', # ✅ All XML files in "components" & subfolders
+            'bim_project/static/src/components/**/*.scss' # ✅ All SCSS files in "components" & subfolders
+        ],
+    },
 }

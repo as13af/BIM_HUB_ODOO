@@ -11,8 +11,8 @@
             "python": "C:/Program Files/Odoo 16.0.20250218/python/python.exe",
             "program": "C:/Program Files/Odoo 16.0.20250218/server/odoo-bin",
             "args": [
-                "--config=F:\\bimodoo\\bim_odoo.conf",
-                "--database=BIM_Odoo",
+                "--config=F:\\bim_hub_odoo\\bim_hub_odoo.conf",
+                "--database=BIM_HUB_Odoo",
                 "-i", "base",
                 "--without-demo=True",
                 "--dev=all"  // ✅ Enables frontend debugging (OWL, assets, JavaScript)
