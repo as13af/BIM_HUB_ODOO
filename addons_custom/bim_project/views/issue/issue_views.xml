@@ -1,16 +1,113 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id='view_bim_issue_form' model='ir.ui.view'>
-        <field name='name'>bim.issue.form</field>
-        <field name='model'>bim.issue</field>
-        <field name='arch' type='xml'>
-            <form string='BIM Issue'>
-                <sheet>
-                    <group>
-                        <field name='name'/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+
+  <!-- Tree View for Issues -->
+  <record id="view_bim_issue_tree" model="ir.ui.view">
+    <field name="name">bim.issue.tree</field>
+    <field name="model">bim.issue</field>
+    <field name="arch" type="xml">
+      <tree string="BIM Issues">
+        <field name="name"/>
+        <field name="status"/>
+        <field name="priority"/>
+        <field name="assignee_id"/>
+        <field name="due_date"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form View for Issues -->
+  <record id="view_bim_issue_form" model="ir.ui.view">
+    <field name="name">bim.issue.form</field>
+    <field name="model">bim.issue</field>
+    <field name="arch" type="xml">
+      <form string="BIM Issue">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="status" widget="statusbar"/>
+            <field name="priority"/>
+          </group>
+          <group>
+            <field name="reporter_id"/>
+            <field name="assignee_id"/>
+            <field name="due_date"/>
+          </group>
+          <group>
+            <field name="model_id" string="Project"/>
+            <field name="digital_twin_id"/>
+            <field name="location"/>
+          </group>
+          <notebook>
+            <page string="Description">
+              <field name="description"/>
+            </page>
+            <page string="Viewpoint &amp; BCF">
+              <field name="viewpoint" filename="viewpoint_name"/>
+              <field name="bcf_file" filename="name"/>
+            </page>
+            <page string="Comments">
+              <field name="comments">
+                <tree>
+                  <field name="author_id"/>
+                  <field name="status"/>
+                  <field name="create_date"/>
+                </tree>
+                <form>
+                  <group>
+                    <field name="author_id"/>
+                    <field name="status"/>
+                    <field name="comment"/>
+                  </group>
+                  <group>
+                    <field name="viewpoint" filename="viewpoint_name"/>
+                  </group>
+                </form>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Kanban View for Issues -->
+  <record id="view_bim_issue_kanban" model="ir.ui.view">
+    <field name="name">bim.issue.kanban</field>
+    <field name="model">bim.issue</field>
+    <field name="arch" type="xml">
+      <kanban>
+        <field name="status"/>
+        <field name="priority"/>
+        <field name="assignee_id"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_global_click">
+              <strong><field name="name"/></strong>
+              <div>Status: <field name="status"/></div>
+              <div>Priority: <field name="priority"/></div>
+              <div>Assignee: <field name="assignee_id"/></div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <!-- Action to open the Issue views -->
+  <record id="action_bim_issue" model="ir.actions.act_window">
+    <field name="name">BIM Issues</field>
+    <field name="res_model">bim.issue</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create your first BIM issue
+      </p>
+    </field>
+  </record>
+
+  <!-- Menu Items -->
+  <menuitem id="menu_bim_issue_root" name="Issues" parent="menu_bim_project_main" sequence="2"/>
+  <menuitem id="menu_bim_issue" name="Manage Issues" parent="menu_bim_issue_root" action="action_bim_issue" sequence="1"/>
+
 </odoo>

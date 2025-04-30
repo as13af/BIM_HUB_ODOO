@@ -1,4 +1,5 @@
 from odoo import models, fields
+from datetime import timedelta, datetime
 
 class BIMDocument(models.Model):
     _name = 'bim.document'

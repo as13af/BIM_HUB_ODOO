@@ -1,16 +1,112 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id='view_bim_document_form' model='ir.ui.view'>
-        <field name='name'>bim.document.form</field>
-        <field name='model'>bim.document</field>
-        <field name='arch' type='xml'>
-            <form string='BIM Document'>
-                <sheet>
-                    <group>
-                        <field name='name'/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+
+  <!-- Tree View for Documents -->
+  <record id="view_bim_document_tree" model="ir.ui.view">
+    <field name="name">bim.document.tree</field>
+    <field name="model">bim.document</field>
+    <field name="arch" type="xml">
+      <tree string="BIM Documents">
+        <field name="name"/>
+        <field name="file_type"/>
+        <field name="revision"/>
+        <field name="status"/>
+        <field name="created_by"/>
+        <field name="created_date"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form View for Documents -->
+  <record id="view_bim_document_form" model="ir.ui.view">
+    <field name="name">bim.document.form</field>
+    <field name="model">bim.document</field>
+    <field name="arch" type="xml">
+      <form string="BIM Document">
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="file" filename="file_name"/>
+            <field name="file_type"/>
+            <field name="revision"/>
+            <field name="status" widget="statusbar"/>
+          </group>
+          <group>
+            <field name="classification_code"/>
+            <field name="classification_name"/>
+          </group>
+          <group>
+            <field name="project_id"/>
+            <field name="issue_ids"/>
+          </group>
+          <notebook>
+            <page string="Description">
+              <field name="description"/>
+            </page>
+            <page string="Classification">
+              <field name="classification_description"/>
+            </page>
+            <page string="Comments">
+              <field name="comments">
+                <tree>
+                  <field name="author_id"/>
+                  <field name="status"/>
+                  <field name="create_date"/>
+                </tree>
+                <form>
+                  <group>
+                    <field name="author_id"/>
+                    <field name="status"/>
+                  </group>
+                  <group>
+                    <field name="comment"/>
+                    <field name="attachment" filename="attachment_name"/>
+                  </group>
+                </form>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Kanban View for Documents -->
+  <record id="view_bim_document_kanban" model="ir.ui.view">
+    <field name="name">bim.document.kanban</field>
+    <field name="model">bim.document</field>
+    <field name="arch" type="xml">
+      <kanban>
+        <field name="name"/>
+        <field name="status"/>
+        <field name="file_type"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_global_click">
+              <strong><field name="name"/></strong>
+              <div>Type: <field name="file_type"/></div>
+              <div>Status: <field name="status"/></div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <!-- Action for Documents -->
+  <record id="action_bim_document" model="ir.actions.act_window">
+    <field name="name">BIM Documents</field>
+    <field name="res_model">bim.document</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Upload and manage your BIM documents here.
+      </p>
+    </field>
+  </record>
+
+  <!-- Menu Items -->
+  <menuitem id="menu_bim_document_root" name="Documents" parent="menu_bim_project_main" sequence="3"/>
+  <menuitem id="menu_bim_document" name="Manage Documents" parent="menu_bim_document_root" action="action_bim_document" sequence="1"/>
+
 </odoo>

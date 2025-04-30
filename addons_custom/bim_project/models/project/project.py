@@ -27,3 +27,8 @@ class BIMProject(models.Model):
     bcf_file = fields.Binary(string='BCF File')
     cobie_file = fields.Binary(string='COBie File')
     documents = fields.One2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'bim.project')], string='Documents')
+    #As Parent
+    bim_issue_id = fields.One2many('bim.issue', 'model_id', string='Issues')
+    bim_digital_twin_id = fields.One2many('bim.digital.twin', 'project_id', string='Digital Twin')
+    bim_document_id = fields.One2many('bim.document', 'project_id', string='Documents')
+    

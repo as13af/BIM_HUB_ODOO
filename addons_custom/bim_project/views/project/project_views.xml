@@ -1,16 +1,136 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id='view_bim_project_form' model='ir.ui.view'>
-        <field name='name'>bim.project.form</field>
-        <field name='model'>bim.project</field>
-        <field name='arch' type='xml'>
-            <form string='BIM Project'>
+
+    <!-- Tree View -->
+    <record id="view_bim_project_tree" model="ir.ui.view">
+        <field name="name">bim.project.tree</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <tree string="BIM Projects">
+                <field name="name"/>
+                <field name="project_code"/>
+                <field name="status"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="location"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_bim_project_form" model="ir.ui.view">
+        <field name="name">bim.project.form</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <form string="BIM Project">
                 <sheet>
                     <group>
-                        <field name='name'/>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_code"/>
+                            <field name="status"/>
+                            <field name="project_type"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="budget"/>
+                            <field name="currency_id"/>
+                        </group>
                     </group>
+                    <group>
+                        <field name="owner_id"/>
+                        <field name="contractor_id"/>
+                        <field name="architect_id"/>
+                        <field name="project_manager_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="IFC / BCF / COBie">
+                            <field name="ifc_model" filename="name"/>
+                            <field name="bcf_file" filename="name"/>
+                            <field name="cobie_file" filename="name"/>
+                        </page>
+                        <page string="Documents">
+                            <field name="bim_document_id">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="file_type"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Issues">
+                            <field name="bim_issue_id">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="status"/>
+                                    <field name="priority"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Digital Twins">
+                            <field name="bim_digital_twin_id">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="status"/>
+                                    <field name="last_updated"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
+
+    <!-- Kanban View -->
+    <record id="view_bim_project_kanban" model="ir.ui.view">
+        <field name="name">bim.project.kanban</field>
+        <field name="model">bim.project</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="status"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div>Status: <field name="status"/></div>
+                            <div>Start: <field name="start_date"/></div>
+                            <div>End: <field name="end_date"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_bim_project" model="ir.actions.act_window">
+        <field name="name">BIM Projects</field>
+        <field name="res_model">bim.project</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first BIM project
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_bim_root" name="BIM Hub Odoo" sequence="10"/>
+    <menuitem id="menu_bim_project" name="Projects" parent="menu_bim_root" sequence="1"/>
+
+    <menuitem id="menu_bim_project_main"
+              name="Manage Projects"
+              parent="menu_bim_project"
+              action="action_bim_project"
+              sequence="1"/>
+
 </odoo>

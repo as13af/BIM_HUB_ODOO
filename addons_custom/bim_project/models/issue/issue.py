@@ -25,3 +25,5 @@ class BIMIssue(models.Model):
     viewpoint = fields.Binary(string='Viewpoint Image')
     bcf_file = fields.Binary(string='BCF File')
     comments = fields.One2many('bim.issue.comment', 'issue_id', string='Comments')
+    digital_twin_id = fields.Many2one('bim.digital.twin', string='Digital Twin')
+    document_id = fields.Many2one('bim.document', string ='Document')
