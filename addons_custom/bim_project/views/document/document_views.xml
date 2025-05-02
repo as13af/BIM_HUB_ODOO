@@ -106,7 +106,7 @@
   </record>
 
   <!-- Menu Items -->
-  <menuitem id="menu_bim_document_root" name="Documents" parent="menu_bim_project_main" sequence="3"/>
+  <menuitem id="menu_bim_document_root" name="Documents" parent="menu_bim_root" sequence="3"/>
   <menuitem id="menu_bim_document" name="Manage Documents" parent="menu_bim_document_root" action="action_bim_document" sequence="1"/>
 
 </odoo>

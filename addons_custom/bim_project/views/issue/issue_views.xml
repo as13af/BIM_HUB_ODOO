@@ -107,7 +107,7 @@
   </record>
 
   <!-- Menu Items -->
-  <menuitem id="menu_bim_issue_root" name="Issues" parent="menu_bim_project_main" sequence="2"/>
+  <menuitem id="menu_bim_issue_root" name="Issues" parent="menu_bim_root" sequence="2"/>
   <menuitem id="menu_bim_issue" name="Manage Issues" parent="menu_bim_issue_root" action="action_bim_issue" sequence="1"/>
 
 </odoo>
