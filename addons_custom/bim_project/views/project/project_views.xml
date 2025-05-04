@@ -10,6 +10,7 @@
                 <field name="name"/>
                 <field name="project_code"/>
                 <field name="status"/>
+                <field name="progress" widget="progressbar" options="{'max_value': 100}"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="location"/>
@@ -23,12 +24,21 @@
         <field name="model">bim.project</field>
         <field name="arch" type="xml">
             <form string="BIM Project">
+                <header>
+                    <!-- Status buttons -->
+                    <button name="action_set_active" type="object" string="Activate"
+                            attrs="{'invisible': [('status', '!=', 'draft')]}" class="btn-primary"/>
+                    <button name="action_set_completed" type="object" string="Complete"
+                            attrs="{'invisible': [('status', '!=', 'active')]}" class="btn-success"/>
+                    <button name="action_archive" type="object" string="Archive"
+                            attrs="{'invisible': [('status', '!=', 'completed')]}" class="btn-default"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,active,completed,archived"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
                             <field name="name"/>
                             <field name="project_code"/>
-                            <field name="status"/>
                             <field name="project_type"/>
                             <field name="location"/>
                         </group>
@@ -39,6 +49,10 @@
                             <field name="currency_id"/>
                         </group>
                     </group>
+                    <!-- Progress bar right under the title block -->
+                    <div class="o_form_statusbar">
+                        <field name="progress" widget="progressbar" options="{'max_value': 100}"/>
+                    </div>
                     <group>
                         <field name="owner_id"/>
                         <field name="contractor_id"/>
@@ -92,18 +106,26 @@
         <field name="name">bim.project.kanban</field>
         <field name="model">bim.project</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban class="o_kanban_card">
                 <field name="name"/>
                 <field name="status"/>
+                <field name="progress"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <templates>
                     <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div>Status: <field name="status"/></div>
-                            <div>Start: <field name="start_date"/></div>
-                            <div>End: <field name="end_date"/></div>
+                        <div t-attf-class="oe_kanban_global_click o_kanban_record #{record.status.raw_value}">
+                            <div class="o_kanban_header">
+                                <strong><field name="name"/></strong>
+                            </div>
+                            <div class="o_kanban_body">
+                                <div>Status: <field name="status"/></div>
+                                <div>
+                                    <field name="progress" widget="progressbar" options="{'max_value': 100}"/>
+                                </div>
+                                <div>Start: <field name="start_date"/></div>
+                                <div>End: <field name="end_date"/></div>
+                            </div>
                         </div>
                     </t>
                 </templates>
@@ -115,7 +137,7 @@
     <record id="action_bim_project" model="ir.actions.act_window">
         <field name="name">BIM Projects</field>
         <field name="res_model">bim.project</field>
-        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first BIM project
@@ -126,7 +148,6 @@
     <!-- Menu -->
     <menuitem id="menu_bim_root" name="BIM Hub Odoo" sequence="10"/>
     <menuitem id="menu_bim_project" name="Projects" parent="menu_bim_root" sequence="1"/>
-
     <menuitem id="menu_bim_project_main"
               name="Manage Projects"
               parent="menu_bim_project"

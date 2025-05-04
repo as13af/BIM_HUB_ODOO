@@ -1,85 +1,176 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_bim_digital_twin_tree" model="ir.ui.view">
-        <field name="name">bim.digital.twin.tree</field>
-        <field name="model">bim.digital.twin</field>
-        <field name="arch" type="xml">
-            <tree string="Digital Twins">
-                <field name="name"/>
-                <field name="status"/>
-                <field name="project_id"/>
-                <field name="last_updated"/>
-            </tree>
-        </field>
-    </record>
-    <record id="view_bim_digital_twin_form" model="ir.ui.view">
-        <field name="name">bim.digital.twin.form</field>
-        <field name="model">bim.digital.twin</field>
-        <field name="arch" type="xml">
-            <form string="Digital Twin">
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="status" widget="statusbar"/>
-                        <field name="project_id"/>
-                    </group>
-                    <group>
-                        <field name="last_updated"/>
-                        <field name="location"/>
-                    </group>
-                    <notebook>
-                        <page string="Description">
-                            <field name="description"/>
-                        </page>
-                        <page string="Model &amp; Viewpoint">
-                            <field name="model_file" filename="name"/>
-                            <field name="viewpoint" filename="viewpoint"/>
-                        </page>
-                        <page string="Issues">
-                            <field name="issues">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="status"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-    <record id="view_bim_digital_twin_kanban" model="ir.ui.view">
-        <field name="name">bim.digital.twin.kanban</field>
-        <field name="model">bim.digital.twin</field>
-        <field name="arch" type="xml">
-            <kanban>
-                <field name="name"/>
-                <field name="status"/>
-                <field name="last_updated"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div>Status: <field name="status"/></div>
-                            <div>Updated: <field name="last_updated"/></div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
-    <record id="action_bim_digital_twin" model="ir.actions.act_window">
-        <field name="name">Digital Twins</field>
-        <field name="res_model">bim.digital.twin</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first Digital Twin
-            </p>
-        </field>
-    </record>
 
-    <menuitem id="menu_bim_digital_twin_root" name="Digital Twins" parent="menu_bim_root" sequence="3"/>
-    <menuitem id="menu_bim_digital_twin" name="Manage Digital Twins" parent="menu_bim_digital_twin_root" action="action_bim_digital_twin" sequence="1"/>
+  <!-- Tree View for Digital Twins -->
+  <record id="view_bim_digital_twin_tree" model="ir.ui.view">
+    <field name="name">bim.digital.twin.tree</field>
+    <field name="model">bim.digital.twin</field>
+    <field name="arch" type="xml">
+      <tree string="Digital Twins" editable="bottom">
+        <field name="name"/>
+        <field name="project_id"/>
+        <field name="status" widget="statusbar"
+               statusbar_visible="draft,active,needs_sync,archived"/>
+        <field name="issue_count"/>
+        <field name="issue_resolved"/>
+        <field name="sync_progress" widget="progressbar" options="{'max_value':100}"/>
+        <field name="last_updated"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Form View for Digital Twin -->
+  <record id="view_bim_digital_twin_form" model="ir.ui.view">
+    <field name="name">bim.digital.twin.form</field>
+    <field name="model">bim.digital.twin</field>
+    <field name="arch" type="xml">
+      <form string="Digital Twin">
+        <header>
+          <button name="action_activate" type="object" string="Activate"
+                  class="btn-success"
+                  attrs="{'invisible': [('status', '!=', 'draft')]}"/>
+          <button name="action_request_sync" type="object" string="Request Sync"
+                  class="btn-warning"
+                  attrs="{'invisible': [('status', 'not in', ('active','draft'))]}"/>
+          <button name="action_archive" type="object" string="Archive"
+                  class="btn-default"
+                  attrs="{'invisible': [('status', '!=', 'needs_sync')]}"/>
+          <field name="status" widget="statusbar"
+                 statusbar_visible="draft,active,needs_sync,archived"/>
+        </header>
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="project_id"/>
+              <field name="location"/>
+            </group>
+            <group>
+              <field name="last_updated" readonly="1"/>
+              <field name="issue_count" readonly="1"/>
+              <field name="issue_resolved" readonly="1"/>
+              <field name="sync_progress" widget="progressbar"
+                     options="{'max_value':100}" readonly="1"/>
+            </group>
+          </group>
+
+          <notebook>
+            <page string="Description">
+              <field name="description" nolabel="1"/>
+            </page>
+            <page string="Model and Viewpoint">
+              <group>
+                <field name="model_file" filename="model_filename"/>
+                <field name="model_filename"/>
+              </group>
+              <group>
+                <field name="viewpoint" filename="viewpoint"/>
+                <field name="viewpoint_date" readonly="1"/>
+              </group>
+            </page>
+            <page string="Issues">
+              <field name="issue_ids">
+                <tree>
+                  <field name="name"/>
+                  <field name="status"/>
+                  <field name="priority"/>
+                  <field name="due_date"/>
+                </tree>
+                <form>
+                  <sheet>
+                    <group>
+                      <field name="name"/>
+                      <field name="status"/>
+                      <field name="priority"/>
+                      <field name="assignee_id"/>
+                    </group>
+                    <group>
+                      <field name="description"/>
+                      <field name="due_date"/>
+                    </group>
+                  </sheet>
+                </form>
+              </field>
+            </page>
+            <page string="Viewpoint History">
+              <field name="viewpoint_history">
+                <tree>
+                  <field name="captured_on"/>
+                  <field name="image" widget="image" options="{'size': [80, 80]}"/>
+                </tree>
+                <form>
+                  <sheet>
+                    <group>
+                      <field name="captured_on" readonly="1"/>
+                    </group>
+                    <group>
+                      <field name="image" widget="image" options="{'size': [300, 200]}"/>
+                    </group>
+                  </sheet>
+                </form>
+              </field>
+            </page>
+            <page string="Chatter">
+              <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+              </div>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Kanban View for Digital Twins -->
+  <record id="view_bim_digital_twin_kanban" model="ir.ui.view">
+    <field name="name">bim.digital.twin.kanban</field>
+    <field name="model">bim.digital.twin</field>
+    <field name="arch" type="xml">
+      <kanban class="o_kanban_record">
+        <field name="name"/>
+        <field name="status"/>
+        <field name="sync_progress"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div t-attf-class="oe_kanban_global_click o_kanban_record #{record.status.raw_value}">
+              <div class="o_kanban_header">
+                <strong><field name="name"/></strong>
+                <div class="o_tag">
+                  <field name="status"/>
+                </div>
+              </div>
+              <div class="o_kanban_body">
+                <div>Project: <field name="project_id"/></div>
+                <div>
+                  <field name="sync_progress" widget="progressbar" options="{'max_value':100}"/>
+                  <small>% issues resolved</small>
+                </div>
+                <div>Updated: <field name="last_updated"/></div>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <!-- Action & Menu for Digital Twins -->
+  <record id="action_bim_digital_twin" model="ir.actions.act_window">
+    <field name="name">Digital Twins</field>
+    <field name="res_model">bim.digital.twin</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create and manage your Digital Twins here.
+      </p>
+    </field>
+  </record>
+
+  <!-- Menu Items -->
+  <menuitem id="menu_bim_digital_twin_root" name="Digital Twins" parent="menu_bim_root" sequence="3"/>
+  <menuitem id="menu_bim_digital_twin" name="Manage Digital Twins"
+            parent="menu_bim_digital_twin_root"
+            action="action_bim_digital_twin" sequence="1"/>
 
 </odoo>

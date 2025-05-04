@@ -1,38 +1,69 @@
-bim_project/
-├── __init__.py
-├── __manifest__.py
-├── models/
-│   ├── __init__.py
-│   ├── project.py
-│   ├── issue.py
-│   ├── document.py
-│   └── digital_twin.py
-├── views/
-│   ├── project_views.xml
-│   ├── issue_views.xml
-│   ├── document_views.xml
-│   └── digital_twin_views.xml
-├── security/
-│   ├── ir.model.access.csv
-│   └── security.xml
-├── data/
-│   ├── project_data.xml
-│   └── issue_data.xml
-├── static/
-│   └── src/
-│       ├── js/
-│       │   └── bim_viewer.js
-│       ├── css/
-│       │   └── styles.css
-│       └── img/
-│           └── icon.png
-├── controllers/
-│   └── __init__.py
-├── report/
-│   └── issue_report.xml
-├── wizard/
-│   └── __init__.py
-├── i18n/
-│   └── en.po
-└── tests/
-    └── test_bim_project.py
+addons_custom/
+└── bim_project/
+    ├── __init__.py
+    ├── __manifest__.py
+    ├── Meaning.txt
+    ├── ProjectStructure.txt
+
+    ├── controllers/
+    │   ├── __init__.py
+    │   └── controllers.py
+
+    ├── demo/
+    │   └── demo.xml
+
+    ├── models/
+    │   ├── __init__.py
+    │   ├── models.py
+    │
+    │   ├── classification/
+    │   │   ├── __init__.py
+    │   │   └── classification.py
+    │
+    │   ├── digital_twin/
+    │   │   ├── __init__.py
+    │   │   ├── digital_twin.py
+    │   │   └── digital_twin_viewpoint.py
+    │
+    │   ├── document/
+    │   │   ├── __init__.py
+    │   │   ├── document.py
+    │   │   └── document_comment.py
+    │
+    │   ├── issue/
+    │   │   ├── __init__.py
+    │   │   ├── issue.py
+    │   │   └── issue_comment.py
+    │
+    │   └── project/
+    │       ├── __init__.py
+    │       └── project.py
+
+    ├── security/
+    │   └── ir.model.access.csv
+
+    ├── static/
+    │   ├── description/
+    │   └── src/
+
+    ├── views/
+    │   ├── templates.xml
+    │   ├── views.xml
+    │
+    │   ├── digital_twin/
+    │   │   ├── digital_twin_views.xml
+    │   │   └── digital_twin_viewpoint_views.xml
+    │
+    │   ├── document/
+    │   │   ├── document_views.xml
+    │   │   └── document_comment_views.xml
+    │
+    │   ├── issue/
+    │   │   ├── issue_views.xml
+    │   │   └── issue_comment_views.xml
+    │
+    │   ├── project/
+    │   │   └── project_views.xml
+    │
+    │   └── js/
+    │   │   └── js_views.xml

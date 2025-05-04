@@ -17,6 +17,7 @@
     'author': 'Ali Shidqie Al Faruqi',
     'data': [
         'views/digital_twin/digital_twin_views.xml',
+        'views/digital_twin/digital_twin_viewpoint_views.xml',
         'views/document/document_views.xml',
         'views/document/document_comment_views.xml',
         'views/issue/issue_views.xml',
