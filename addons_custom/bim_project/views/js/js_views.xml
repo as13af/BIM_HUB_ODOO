@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- 1. Define the client action -->
+  <record id="action_bim_dashboard" model="ir.actions.client">
+    <field name="name">BIM Dashboard</field>
+    <!-- Must match the tag you registered in js_template.js -->
+    <field name="tag">owl.js_template</field>
+  </record>
+
+  <!-- 2. Add a menu item under your BIM Hub root menu -->
+  <menuitem
+    id="menu_bim_dashboard"
+    name="Dashboard"
+    parent="menu_bim_root"
+    action="action_bim_dashboard"
+    sequence="5"/>
+</odoo>

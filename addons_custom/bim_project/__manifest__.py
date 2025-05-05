@@ -32,17 +32,17 @@
         # 'views/bim_material_views.xml',
         # 'views/bim_project_views.xml',
         # 'views/bim_task_views.xml',
-        # 'views/js_template_views.xml',
+        'views/js/js_views.xml',
 
     ],
     'images': ['static/description/icon.png'],
     'installable': True,
     'application': True,
     'assets': {
-        # 'web.assets_backend': [
-        #     'bim_project/static/src/components/**/*.js',  # ✅ All JS files in "components" & subfolders
-        #     'bim_project/static/src/components/**/*.xml', # ✅ All XML files in "components" & subfolders
-        #     'bim_project/static/src/components/**/*.scss' # ✅ All SCSS files in "components" & subfolders
-        # ],
+        'web.assets_backend': [
+            'bim_project/static/src/components/**/*.js',  # ✅ All JS files in "components" & subfolders
+            'bim_project/static/src/components/**/*.xml', # ✅ All XML files in "components" & subfolders
+            'bim_project/static/src/components/**/*.scss' # ✅ All SCSS files in "components" & subfolders
+        ],
     },
 }
