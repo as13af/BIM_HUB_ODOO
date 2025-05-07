@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api, _
 
 class BIMIssue(models.Model):
     _name = 'bim.issue'
@@ -27,3 +27,24 @@ class BIMIssue(models.Model):
     comments = fields.One2many('bim.issue.comment', 'issue_id', string='Comments', ondelete='cascade')
     digital_twin_id = fields.Many2one('bim.digital.twin', string='Digital Twin', ondelete='cascade')
     document_id = fields.Many2one('bim.document', string ='Document', ondelete='cascade')
+
+    @api.model
+    def calculate_avg_resolution(self):
+        """
+        Compute average resolution time (in days) for all issues
+        that have been resolved or closed.
+        """
+        # find all issues that have transitioned to resolved/closed
+        issues = self.search([('status', 'in', ['resolved', 'closed']), ('create_date', '!=', False)])
+        if not issues:
+            return 0.0
+        total_days = 0.0
+        count = 0
+        for issue in issues:
+            # use 'write_date' or track a custom resolved_date field
+            resolved_date = issue.write_date if issue.status in ('resolved','closed') else None
+            if resolved_date:
+                delta = resolved_date - issue.create_date
+                total_days += delta.days + delta.seconds / 86400.0
+                count += 1
+        return round(total_days / count, 1) if count else 0.0

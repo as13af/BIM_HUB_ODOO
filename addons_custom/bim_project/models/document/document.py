@@ -64,7 +64,7 @@ class BIMDocument(models.Model):
                                             compute='_compute_approval_duration', store=True)
 
     # --- Create / Write overrides for versioning ---
-    @api.model_create_multi
+    @api.model
     def create(self, vals_list):
         records = super().create(vals_list)
         for doc in records:
@@ -176,6 +176,23 @@ class BIMDocument(models.Model):
                         _("Only one approved revision allowed for document %s") % doc.name
                     )
 
+    @api.model
+    def calculate_avg_approval(self):
+        """
+        Compute average approval turnaround (in days) for all documents
+        that have been approved (status='approved').
+        """
+        docs = self.search([('status', '=', 'approved'), ('review_requested_on', '!=', False)])
+        if not docs:
+            return 0.0
+        total_days = 0.0
+        count = 0
+        for doc in docs:
+            if doc.reviewed_on and doc.review_requested_on:
+                delta = doc.reviewed_on - doc.review_requested_on
+                total_days += delta.days + delta.seconds / 86400.0
+                count += 1
+        return round(total_days / count, 1) if count else 0.0
     # @api.onchange('classification_code')
     # def _onchange_classification(self):
     #     if self.classification_code:

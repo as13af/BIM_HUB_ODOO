@@ -53,9 +53,9 @@ class BIMProject(models.Model):
     @api.depends('bim_issue_id', 'bim_issue_id.status')
     def _compute_progress(self):
         for project in self:
-            total = len(project.issue_id)
+            total = len(project.bim_issue_id)
             if total:
-                done = len(project.issue_id.filtered(lambda i: i.status in ['resolved', 'closed']))
+                done = len(project.bim_issue_id.filtered(lambda i: i.status in ['resolved', 'closed']))
                 project.progress = (done / total) * 100
             else:
                 project.progress = 0.0
