@@ -36,6 +36,7 @@ export class Dashboard extends Component {
           avgIssueResolution: 0,
           avgDocApproval: 0,
           issueChart: { labels: [], datasets: [] },
+          projectTypeCounts:{},
         },
       });
   
@@ -119,7 +120,7 @@ export class Dashboard extends Component {
               this.orm.call("bim.issue", "search_count", [[["status", "=", s]]])
             )
           );
-  
+
           this.state.metrics.issueChart = {
             labels: statusLabels,
             datasets: [
@@ -129,9 +130,33 @@ export class Dashboard extends Component {
               },
             ],
           };
+                // 8. Project Type Distribution
+                const projectTypes = [
+                  { key: "construction", label: "Construction" },
+                  { key: "renovation", label: "Renovation" },
+                  { key: "maintenance", label: "Maintenance" },
+                  { key: "other", label: "Other" },
+              ];
+
+              const typeCounts = await Promise.all(
+                  projectTypes.map((type) =>
+                      this.orm.call("bim.project", "search_count", [[["project_type", "=", type.key]]])
+                  )
+              );
+
+              this.state.metrics.projectTypeChart = {
+                  labels: projectTypes.map((type) => type.label),
+                  datasets: [
+                      {
+                          data: typeCounts,
+                          backgroundColor: ["#2196f3", "#4caf50", "#ff9800", "#9e9e9e"],
+                      },
+                  ],
+              };
         } catch (error) {
           console.error("Error fetching dashboard metrics:", error);
         }
+
       });
   
     //   // Optionally do chart re-init or dynamic updates here

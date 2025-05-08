@@ -8,9 +8,9 @@
                         <div class="col m-0 p-0">
                             <div class="shadow-sm border m-2 p-4 bg-white">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h1 class="text-primary fw-bold">Custom BIM Dashboard</h1> <!--Custom Sales Dashboard-->
+                                    <h1 class="text-primary fw-bold">Custom BIM Dashboard</h1>
                                     <div>
-                                        <select class="form-select">
+                                        <select class="form-select" t-on-change="onFilterChange">
                                             <option value="0">Select Period</option>
                                             <option value="7">Last 7 Days</option>
                                             <option value="30">Last 30 Days</option>
@@ -23,64 +23,40 @@
                         </div>
                     </div>
                     <div class="row">
-                        <KpiCard name="'BIM 1'" value="10" percentage="6"/> <!--Quotations--> 
-                        <KpiCard name="'BIM 2'" value="20" percentage="20"/> <!--Orders-->
-                        <KpiCard name="'BIM 3'" value="'30.50K'" percentage="-3"/> <!--Revenue-->
-                        <KpiCard name="'BIM 4'" value="'2.5K'" percentage="-10"/> <!--Average Order-->
+                        <KpiCard name="'Active Projects'" value="state.metrics.projectCount" percentage="6"/>
+                        <KpiCard name="'Open Issues'" value="state.metrics.openIssues" percentage="20"/>
+                        <KpiCard name="'Pending Documents'" value="state.metrics.pendingDocs" percentage="-3"/>
+                        <KpiCard name="'Approved Documents'" value="state.metrics.approvedDocs" percentage="-10"/>
                     </div>
                     <div class="row">
                         <div class="col-lg-6 m-0 p-0">
                             <div class="shadow-sm border m-2 p-4 bg-white">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="text-primary fw-bold">TOP BIM Products</h3> <!--Top Products-->
+                                    <h3 class="text-primary fw-bold">Issue Status Distribution</h3>
                                     <div class="px-3 py-1 bg-primary cursor-pointer">
                                         <span class="fa fa-arrow-right text-white"/>
                                     </div>
                                 </div>
-                                <ChartRenderer type="'doughnut'" title="'Top BIM Product Report'"/> <!--title="'Top Products Report'"-->
+                                <ChartRenderer type="'doughnut'" title="'Issue Status Distribution'" data="state.metrics.issueChart"/>
                             </div>
                         </div>
+                        <!-- Add more chart components as needed -->
+                    </div>
+                </div>
+                    <div class="row">
                         <div class="col-lg-6 m-0 p-0">
                             <div class="shadow-sm border m-2 p-4 bg-white">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="text-primary fw-bold">Top BIM People</h3><!--Top Sales People-->
+                                    <h3 class="text-primary fw-bold">Project Type Distribution</h3>
                                     <div class="px-3 py-1 bg-primary cursor-pointer">
                                         <span class="fa fa-arrow-right text-white"/>
                                     </div>
                                 </div>
-                                <ChartRenderer type="'pie'" title="'Top BIM People Report'"/><!--title="'Top Sales People Report'"-->
+                                <ChartRenderer type="'pie'" title="'Project Type Distribution'" data="state.metrics.projectTypeChart"/>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="row">
-                        <div class="col m-0 p-0">
-                            <div class="shadow-sm border m-2 p-4 bg-white">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="text-primary fw-bold">BIM Monthly Sales</h3><!--Monthly Sales-->
-                                    <div class="px-3 py-1 bg-primary cursor-pointer">
-                                        <span class="fa fa-arrow-right text-white"/>
-                                    </div>
-                                </div>
-                                <ChartRenderer type="'bar'" title="'Monthly Sales Report'"/><!--title="'Monthly Sales Report'"-->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col m-0 p-0">
-                            <div class="shadow-sm border m-2 p-4 bg-white">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="text-primary fw-bold">BIM Partner Orders</h3><!--Partner Orders-->
-                                    <div class="px-3 py-1 bg-primary cursor-pointer">
-                                        <span class="fa fa-arrow-right text-white"/>
-                                    </div>
-                                </div>
-                                <ChartRenderer type="'line'" title="'Partner Orders Report'"/><!--title="'Partner Orders Report'"-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Add more columns or rows as needed -->
             </div>
         </div>
     </t>
