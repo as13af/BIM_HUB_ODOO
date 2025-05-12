@@ -26,22 +26,82 @@ class BimDashboardController(http.Controller):
         # 5. Overdue document reviews
         overdue_reviews = env['bim.document'].search_count([('is_overdue', '=', True)])
 
-        # 6. Average resolution & approval times (assuming these methods are defined)
+        # 6. Average resolution & approval times
         avg_issue_resolution = env['bim.issue'].calculate_avg_resolution()
         avg_doc_approval = env['bim.document'].calculate_avg_approval()
 
-        # 7. Issue status chart data
+        # 7. Issue status chart
         status_labels = ["Open", "In Progress", "Resolved", "Closed"]
         statuses = ["open", "in_progress", "resolved", "closed"]
-        counts = [
+        issue_counts = [
             env['bim.issue'].search_count([('status', '=', status)])
             for status in statuses
         ]
         issue_chart = {
             'labels': status_labels,
             'datasets': [{
-                'data': counts,
+                'data': issue_counts,
                 'backgroundColor': ["#f44336", "#ff9800", "#4caf50", "#9e9e9e"],
+            }],
+        }
+
+        # 8. Project status distribution
+        project_statuses = ['draft', 'active', 'completed', 'archived']
+        project_status_labels = ['Draft', 'Active', 'Completed', 'Archived']
+        project_status_counts = [
+            env['bim.project'].search_count([('status', '=', status)])
+            for status in project_statuses
+        ]
+        project_status_chart = {
+            'labels': project_status_labels,
+            'datasets': [{
+                'data': project_status_counts,
+                'backgroundColor': ['#607d8b', '#2196f3', '#4caf50', '#9e9e9e'],
+            }],
+        }
+
+        # 9. Issue priority distribution
+        priorities = ['low', 'medium', 'high']
+        priority_labels = ['Low', 'Medium', 'High']
+        priority_counts = [
+            env['bim.issue'].search_count([('priority', '=', level)])
+            for level in priorities
+        ]
+        issue_priority_chart = {
+            'labels': priority_labels,
+            'datasets': [{
+                'data': priority_counts,
+                'backgroundColor': ['#8bc34a', '#ffc107', '#f44336'],
+            }],
+        }
+
+        # 10. Document status distribution
+        doc_statuses = ['draft', 'to_review', 'approved', 'rejected']
+        doc_status_labels = ['Draft', 'To Review', 'Approved', 'Rejected']
+        doc_status_counts = [
+            env['bim.document'].search_count([('status', '=', status)])
+            for status in doc_statuses
+        ]
+        document_status_chart = {
+            'labels': doc_status_labels,
+            'datasets': [{
+                'data': doc_status_counts,
+                'backgroundColor': ['#9e9e9e', '#ffc107', '#4caf50', '#f44336'],
+            }],
+        }
+
+        # 11. Digital Twin status distribution
+        twin_statuses = ['draft', 'active', 'needs_sync', 'archived']
+        twin_status_labels = ['Draft', 'Active', 'Needs Sync', 'Archived']
+        twin_status_counts = [
+            env['bim.digital.twin'].search_count([('status', '=', status)])
+            for status in twin_statuses
+        ]
+        digital_twin_status_chart = {
+            'labels': twin_status_labels,
+            'datasets': [{
+                'data': twin_status_counts,
+                'backgroundColor': ['#9e9e9e', '#2196f3', '#ff9800', '#607d8b'],
             }],
         }
 
@@ -56,4 +116,8 @@ class BimDashboardController(http.Controller):
             'avgIssueResolution': avg_issue_resolution,
             'avgDocApproval': avg_doc_approval,
             'issueChart': issue_chart,
+            'projectStatusChart': project_status_chart,
+            'issuePriorityChart': issue_priority_chart,
+            'documentStatusChart': document_status_chart,
+            'digitalTwinStatusChart': digital_twin_status_chart,
         }

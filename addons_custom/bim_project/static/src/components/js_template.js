@@ -15,6 +15,40 @@ import { ChartRenderer } from "./chart_renderer/chart_renderer";
 import { KpiCard } from "./kpi_card/kpi_card";
 
 
+const projectTypes = [
+{ key: "construction", label: "Construction" },
+{ key: "renovation", label: "Renovation" },
+{ key: "maintenance", label: "Maintenance" },
+{ key: "other", label: "Other" },
+];
+
+const projectStatuses = [
+  { key: "draft", label: "Draft" },
+  { key: "active", label: "Active" },
+  { key: "completed", label: "Completed" },
+  { key: "archived", label: "Archived" },
+];
+
+const issuePriorities = [
+  { key: "low", label: "Low" },
+  { key: "medium", label: "Medium" },
+  { key: "high", label: "High" },
+];
+
+const documentStatuses = [
+  { key: "draft", label: "Draft" },
+  { key: "to_review", label: "To Review" },
+  { key: "approved", label: "Approved" },
+  { key: "rejected", label: "Rejected" },
+];
+
+const twinStatuses = [
+  { key: "draft", label: "Draft" },
+  { key: "active", label: "Active" },
+  { key: "needs_sync", label: "Needs Sync" },
+  { key: "archived", label: "Archived" },
+];
+
 export class Dashboard extends Component {
     static template = "owl.js_template";
     static components = { ChartRenderer, KpiCard };
@@ -37,6 +71,10 @@ export class Dashboard extends Component {
           avgDocApproval: 0,
           issueChart: { labels: [], datasets: [] },
           projectTypeCounts:{},
+          projectStatusType:{},
+          issuePriorityType:{},
+          documentStatusType:{},
+          digital_twinStatusType:{},
         },
       });
   
@@ -131,13 +169,6 @@ export class Dashboard extends Component {
             ],
           };
                 // 8. Project Type Distribution
-                const projectTypes = [
-                  { key: "construction", label: "Construction" },
-                  { key: "renovation", label: "Renovation" },
-                  { key: "maintenance", label: "Maintenance" },
-                  { key: "other", label: "Other" },
-              ];
-
               const typeCounts = await Promise.all(
                   projectTypes.map((type) =>
                       this.orm.call("bim.project", "search_count", [[["project_type", "=", type.key]]])
@@ -153,6 +184,50 @@ export class Dashboard extends Component {
                       },
                   ],
               };
+
+        //9. Fetch counts for project statuses
+        const projectCounts = await Promise.all(
+          projectStatuses.map((status) =>
+            this.orm.call("bim.project", "search_count", [[["status", "=", status.key]]])
+          )
+        );
+        this.state.metrics.projectStatusType = projectStatuses.reduce((acc, status, idx) => {
+          acc[status.label] = projectCounts[idx];
+          return acc;
+        }, {});
+
+        //10. Fetch counts for issue priorities
+        const issueCounts = await Promise.all(
+          issuePriorities.map((priority) =>
+            this.orm.call("bim.issue", "search_count", [[["priority", "=", priority.key]]])
+          )
+        );
+        this.state.metrics.issuePriorityType = issuePriorities.reduce((acc, priority, idx) => {
+          acc[priority.label] = issueCounts[idx];
+          return acc;
+        }, {});
+
+        //11. Fetch counts for document statuses
+        const documentCounts = await Promise.all(
+          documentStatuses.map((status) =>
+            this.orm.call("bim.document", "search_count", [[["status", "=", status.key]]])
+          )
+        );
+        this.state.metrics.documentStatusType = documentStatuses.reduce((acc, status, idx) => {
+          acc[status.label] = documentCounts[idx];
+          return acc;
+        }, {});
+
+        //12. Fetch counts for digital twin statuses
+        const twinCounts = await Promise.all(
+          twinStatuses.map((status) =>
+            this.orm.call("bim.digital.twin", "search_count", [[["status", "=", status.key]]])
+          )
+        );
+        this.state.metrics.digital_twinStatusType = twinStatuses.reduce((acc, status, idx) => {
+          acc[status.label] = twinCounts[idx];
+          return acc;
+        }, {});
         } catch (error) {
           console.error("Error fetching dashboard metrics:", error);
         }

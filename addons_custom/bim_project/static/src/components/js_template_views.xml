@@ -59,5 +59,70 @@
         </div>
       </div>
     </div>
+          <!-- Additional Charts -->
+      <div class="row g-3 mt-4">
+        <!-- Project Status Distribution -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary fw-bold mb-0">Project Status Distribution</h5>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+              <ChartRenderer type="'pie'" title="'Project Status Distribution'" data="state.metrics.projectStatusChart"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Issue Priority Distribution -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary fw-bold mb-0">Issue Priority Distribution</h5>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+              <ChartRenderer type="'pie'" title="'Issue Priority Distribution'" data="state.metrics.issuePriorityChart"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-4">
+        <!-- Document Status Distribution -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary fw-bold mb-0">Document Status Distribution</h5>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+              <ChartRenderer type="'pie'" title="'Document Status Distribution'" data="state.metrics.documentStatusChart"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital Twin Status Distribution -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary fw-bold mb-0">Digital Twin Status Distribution</h5>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+              <ChartRenderer type="'pie'" title="'Digital Twin Status Distribution'" data="state.metrics.digitalTwinStatusChart"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </t>
 </templates>
