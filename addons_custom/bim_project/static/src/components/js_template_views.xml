@@ -58,7 +58,7 @@
           </div>
         </div>
       </div>
-    </div>
+
           <!-- Additional Charts -->
       <!-- Additional Charts -->
       <div class="row g-3 mt-4">
@@ -125,5 +125,6 @@
         </div>
       </div>
     </div>
+  </div>
   </t>
 </templates>

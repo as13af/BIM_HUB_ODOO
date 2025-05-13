@@ -168,7 +168,12 @@ export class Dashboard extends Component {
             documentStatusCounts,
             twinStatusCounts
         ] = await Promise.all([
-            this.fetchStatusCounts("bim.issue", ["open", "in_progress", "resolved", "closed"], "status"),
+            this.fetchStatusCounts("bim.issue", [
+                {key: "open"}, 
+                {key: "in_progress"}, 
+                {key: "resolved"}, 
+                {key: "closed"}
+            ], "status"),
             this.fetchTypeCounts("bim.project", CHART_CONFIG.projectTypes, "project_type"),
             this.fetchStatusCounts("bim.project", CHART_CONFIG.projectStatuses, "status"),
             this.fetchStatusCounts("bim.issue", CHART_CONFIG.issuePriorities, "priority"),
