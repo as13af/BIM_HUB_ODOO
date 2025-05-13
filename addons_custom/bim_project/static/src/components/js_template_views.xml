@@ -60,6 +60,7 @@
       </div>
     </div>
           <!-- Additional Charts -->
+      <!-- Additional Charts -->
       <div class="row g-3 mt-4">
         <!-- Project Status Distribution -->
         <div class="col-lg-6">
@@ -71,7 +72,7 @@
                   <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
-              <ChartRenderer type="'pie'" title="'Project Status Distribution'" data="state.metrics.projectStatusChart"/>
+              <ChartRenderer type="'pie'" title="'Project Status Distribution'" data="state.metrics.projectStatusType"/>
             </div>
           </div>
         </div>
@@ -86,7 +87,7 @@
                   <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
-              <ChartRenderer type="'pie'" title="'Issue Priority Distribution'" data="state.metrics.issuePriorityChart"/>
+              <ChartRenderer type="'pie'" title="'Issue Priority Distribution'" data="state.metrics.issuePriorityType"/>
             </div>
           </div>
         </div>
@@ -103,7 +104,7 @@
                   <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
-              <ChartRenderer type="'pie'" title="'Document Status Distribution'" data="state.metrics.documentStatusChart"/>
+              <ChartRenderer type="'pie'" title="'Document Status Distribution'" data="state.metrics.documentStatusType"/>
             </div>
           </div>
         </div>
@@ -118,7 +119,7 @@
                   <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
-              <ChartRenderer type="'pie'" title="'Digital Twin Status Distribution'" data="state.metrics.digitalTwinStatusChart"/>
+              <ChartRenderer type="'pie'" title="'Digital Twin Status Distribution'" data="state.metrics.digital_twinStatusType"/>
             </div>
           </div>
         </div>

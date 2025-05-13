@@ -1,4 +1,6 @@
 from odoo import models, fields, api, exceptions
+from datetime import timedelta
+
 
 class BIMProject(models.Model):
     _name = 'bim.project'
@@ -15,14 +17,14 @@ class BIMProject(models.Model):
         ('active', 'Active'),
         ('completed', 'Completed'),
         ('archived', 'Archived'),
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft', tracking=True, index=True)
     location = fields.Char(string='Location')
     project_type = fields.Selection([
         ('construction', 'Construction'),
         ('renovation', 'Renovation'),
         ('maintenance', 'Maintenance'),
         ('other', 'Other')
-    ], string='Project Type')
+    ], string='Project Type', index=True)
 
     owner_id = fields.Many2one('res.partner', string='Owner')
     contractor_id = fields.Many2one('res.partner', string='Contractor')
@@ -69,8 +71,8 @@ class BIMProject(models.Model):
     @api.onchange('start_date', 'end_date')
     def _onchange_dates(self):
         if self.start_date and not self.end_date:
-            # default duration 30 days
-            self.end_date = self.start_date + relativedelta(days=30)
+            # Default duration of 30 days
+            self.end_date = self.start_date + timedelta(days=30)
 
     def action_set_active(self):
         for rec in self:

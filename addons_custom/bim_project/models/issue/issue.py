@@ -11,12 +11,12 @@ class BIMIssue(models.Model):
         ('in_progress', 'In Progress'),
         ('resolved', 'Resolved'),
         ('closed', 'Closed'),
-    ], string='Status', default='open')
+    ], string='Status', default='open', index=True)
     priority = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
         ('high', 'High'),
-    ], string='Priority', default='medium')
+    ], string='Priority', default='medium', index=True)
     due_date = fields.Date(string='Due Date')
     assignee_id = fields.Many2one('res.partner', string='Assigned To')
     reporter_id = fields.Many2one('res.partner', string='Reported By')
