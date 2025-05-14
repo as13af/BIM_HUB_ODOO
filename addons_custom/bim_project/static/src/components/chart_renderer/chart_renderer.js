@@ -51,12 +51,12 @@ export class ChartRenderer extends Component {
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'bottom',
+                        position: 'right',
                     },
                     title: {
                         display: !!this.props.title,
                         text: this.props.title,
-                        position: 'bottom',
+                        position: 'top',
                     },
                 },
             },

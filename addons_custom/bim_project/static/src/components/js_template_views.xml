@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
   <t t-name="owl.js_template" owl="1">
-    <div class="container-fluid bg-light vh-100 overflow-auto py-4">
+    <div class="container-fluid bg-light vh-100 overflow-auto py-3">
       <!-- Header -->
-      <div class="row mb-4">
+      <div class="row mb-3">
         <div class="col">
           <div class="card shadow-sm border-0">
-            <div class="card-body d-flex justify-content-between align-items-center">
-              <h1 class="text-primary fw-bold mb-0">Custom BIM Dashboard</h1>
-              <select class="form-select w-auto" t-on-change="onFilterChange">
+            <div class="card-body d-flex justify-content-between align-items-center py-3">
+              <h1 class="text-primary fw-bold mb-0 h5">
+              <i class="fa fa-building-o" aria-hidden="true"></i>
+              Custom BIM Dashboard
+              </h1>
+              <select class="form-select form-select-sm w-auto" t-on-change="onFilterChange">
                 <option value="0">Select Period</option>
                 <option value="7">Last 7 Days</option>
                 <option value="30">Last 30 Days</option>
@@ -21,110 +24,160 @@
       </div>
 
       <!-- KPI Cards -->
-      <div class="row g-3 mb-4">
-        <KpiCard name="'Active Projects'" value="state.metrics.projectCount" percentage="6"/>
-        <KpiCard name="'Open Issues'" value="state.metrics.openIssues" percentage="20"/>
-        <KpiCard name="'Pending Documents'" value="state.metrics.pendingDocs" percentage="-3"/>
-        <KpiCard name="'Approved Documents'" value="state.metrics.approvedDocs" percentage="-10"/>
+      <div class="row row-cols-2 row-cols-md-4 g-2 mb-3">
+        <KpiCard name="'Active Projects'" value="state.metrics.projectCount" percentage="6" class="'small'"/>
+        <KpiCard name="'Open Issues'" value="state.metrics.openIssues" percentage="20" class="'small'"/>
+        <KpiCard name="'Pending Docs'" value="state.metrics.pendingDocs" percentage="-3" class="'small'"/>
+        <KpiCard name="'Approved Docs'" value="state.metrics.approvedDocs" percentage="-10" class="'small'"/>
       </div>
 
-      <!-- Charts -->
-      <div class="row g-3">
-        <div class="col-lg-6">
+      <!-- Charts Grid -->
+      <div class="row g-2 pb-4">
+        <!-- First Row -->
+        <div class="col-12 col-md-6">
           <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary fw-bold mb-0">Issue Status Distribution</h5>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="fa fa-arrow-right"></i>
+            <div class="card-body p-2 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-primary fw-bold mb-0">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                Issue Status
+                </h6>
+                <button class="btn btn-xs btn-outline-primary p-1">
+                  <i class="fa fa-arrow-right small"></i>
                 </button>
               </div>
-              <ChartRenderer type="'doughnut'" title="'Issue Status Distribution'" data="state.metrics.issueChart"/>
+              <div class="chart-container-sm flex-grow-1">
+                <ChartRenderer type="'doughnut'" data="state.metrics.issueChart"/>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-12 col-md-6">
           <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary fw-bold mb-0">Project Type Distribution</h5>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="fa fa-arrow-right"></i>
+            <div class="card-body p-2 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-primary fw-bold mb-0">
+                <i class="fa fa-building" aria-hidden="true"></i>
+                Project Types
+                </h6>
+                <button class="btn btn-xs btn-outline-primary p-1">
+                  <i class="fa fa-arrow-right small"></i>
                 </button>
               </div>
-              <ChartRenderer type="'pie'" title="'Project Type Distribution'" data="state.metrics.projectTypeChart"/>
+              <div class="chart-container-sm flex-grow-1">
+                <ChartRenderer type="'pie'" data="state.metrics.projectTypeChart"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="col-12 col-md-6 mt-2">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-2 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-primary fw-bold mb-0">
+                <i class="fa fa-tasks" aria-hidden="true"></i>
+                Project Status
+                </h6>
+                <button class="btn btn-xs btn-outline-primary p-1">
+                  <i class="fa fa-arrow-right small"></i>
+                </button>
+              </div>
+              <div class="chart-container-sm flex-grow-1">
+                <ChartRenderer type="'pie'" data="state.metrics.projectStatusType"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-2 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-primary fw-bold mb-0">
+                <i class="fa fa-exclamation" aria-hidden="true"></i>
+                Issue Priority
+                </h6>
+                <button class="btn btn-xs btn-outline-primary p-1">
+                  <i class="fa fa-arrow-right small"></i>
+                </button>
+              </div>
+              <div class="chart-container-sm flex-grow-1">
+                <ChartRenderer type="'pie'" data="state.metrics.issuePriorityType"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Third Row -->
+        <div class="col-12 col-md-6 mt-2">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-2 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-primary fw-bold mb-0">
+                <i class="fa fa-file-text" aria-hidden="true"></i>
+                Document Status
+                </h6>
+                <button class="btn btn-xs btn-outline-primary p-1">
+                  <i class="fa fa-arrow-right small"></i>
+                </button>
+              </div>
+              <div class="chart-container-sm flex-grow-1">
+                <ChartRenderer type="'pie'" data="state.metrics.documentStatusType"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-2 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="text-primary fw-bold mb-0">
+                <i class="fa fa-cogs" aria-hidden="true"></i>
+                Digital Twin Status
+                </h6>
+                <button class="btn btn-xs btn-outline-primary p-1">
+                  <i class="fa fa-arrow-right small"></i>
+                </button>
+              </div>
+              <div class="chart-container-sm flex-grow-1">
+                <ChartRenderer type="'pie'" data="state.metrics.digital_twinStatusType"/>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-          <!-- Additional Charts -->
-      <!-- Additional Charts -->
-      <div class="row g-3 mt-4">
-        <!-- Project Status Distribution -->
-        <div class="col-lg-6">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary fw-bold mb-0">Project Status Distribution</h5>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
-              <ChartRenderer type="'pie'" title="'Project Status Distribution'" data="state.metrics.projectStatusType"/>
-            </div>
-          </div>
-        </div>
-
-        <!-- Issue Priority Distribution -->
-        <div class="col-lg-6">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary fw-bold mb-0">Issue Priority Distribution</h5>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
-              <ChartRenderer type="'pie'" title="'Issue Priority Distribution'" data="state.metrics.issuePriorityType"/>
-            </div>
+  <!-- Optional Footer -->
+      <div class="mt-auto bg-white border-top py-2">
+        <div class="container-fluid">
+          <div class="text-muted small">
+            © 2024 BIM Dashboard - v1.0.0
           </div>
         </div>
       </div>
+      <style>
+        .chart-container-sm {
+          min-height: 200px;
+          max-height: 300px;
+          position: relative;
+        }
+        
+        .chart-container-sm canvas {
+          width: 100% !important;
+          height: auto !important;
+          max-height: 250px;
+        }
 
-      <div class="row g-3 mt-4">
-        <!-- Document Status Distribution -->
-        <div class="col-lg-6">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary fw-bold mb-0">Document Status Distribution</h5>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
-              <ChartRenderer type="'pie'" title="'Document Status Distribution'" data="state.metrics.documentStatusType"/>
-            </div>
-          </div>
-        </div>
-
-        <!-- Digital Twin Status Distribution -->
-        <div class="col-lg-6">
-          <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="text-primary fw-bold mb-0">Digital Twin Status Distribution</h5>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="fa fa-arrow-right"></i>
-                </button>
-              </div>
-              <ChartRenderer type="'pie'" title="'Digital Twin Status Distribution'" data="state.metrics.digital_twinStatusType"/>
-            </div>
-          </div>
-        </div>
-      </div>
+        .btn-xs {
+          padding: 0.15rem 0.4rem;
+          font-size: 0.75rem;
+          line-height: 1.2;
+          border-radius: 0.2rem;
+        }
+      </style>
     </div>
-  </div>
   </t>
 </templates>
