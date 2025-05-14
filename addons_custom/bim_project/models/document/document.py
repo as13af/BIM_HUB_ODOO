@@ -34,7 +34,7 @@ class BIMDocument(models.Model):
         ('to_review', 'To Review'),
         ('approved',  'Approved'),
         ('rejected',  'Rejected'),
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft', tracking=True, index=True)
 
     review_requested_by      = fields.Many2one('res.users', string='Review Requested By', readonly=True)
     review_requested_on      = fields.Datetime(string='Review Requested On', readonly=True)

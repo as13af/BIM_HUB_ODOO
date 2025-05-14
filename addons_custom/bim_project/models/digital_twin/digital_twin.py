@@ -16,7 +16,7 @@ class DigitalTwin(models.Model):
         ('active',      'Active'),
         ('needs_sync',  'Needs Sync'),
         ('archived',    'Archived'),
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft', tracking=True, index=True)
     last_updated        = fields.Datetime(string='Last Updated', readonly=True, tracking=True)
     project_id          = fields.Many2one('bim.project', string='Project', required=True)
     issue_ids           = fields.One2many('bim.issue', 'digital_twin_id', string='Issues')
