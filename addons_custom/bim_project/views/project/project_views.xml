@@ -7,6 +7,7 @@
         <field name="model">bim.project</field>
         <field name="arch" type="xml">
             <tree string="BIM Projects">
+                <field name="create_date"/>
                 <field name="name"/>
                 <field name="project_code"/>
                 <field name="status"/>
@@ -37,6 +38,7 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="create_date" readonly="1"/>
                             <field name="name"/>
                             <field name="project_code"/>
                             <field name="project_type"/>

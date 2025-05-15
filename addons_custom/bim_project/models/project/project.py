@@ -10,6 +10,7 @@ class BIMProject(models.Model):
     name = fields.Char(string='Project Name', required=True, tracking=True)
     project_code = fields.Char(string='Project Code', index=True, tracking=True)
     description = fields.Text(string='Description')
+    created_date = fields.Date(string='Project Created', default=fields.Date.context_today)
     start_date = fields.Date(string='Start Date', tracking=True)
     end_date = fields.Date(string='End Date', tracking=True)
     status = fields.Selection([
@@ -51,7 +52,33 @@ class BIMProject(models.Model):
         string='Progress (%)', compute='_compute_progress',
         store=True, digits=(5, 2)
     )
+    @api.model
+    def create(self, vals):
+        record = super(BIMProject, self).create(vals)
 
+        def abbreviate(name):
+            words = name.upper().split()
+            if len(words) == 1:
+                return words[0][:3]
+            return ''.join([w[0] for w in words])[:3]
+
+        architect_abbr = abbreviate(record.architect_id.name) if record.architect_id else 'ARC'
+        contractor_abbr = abbreviate(record.contractor_id.name) if record.contractor_id else 'CTR'
+        owner_abbr = abbreviate(record.owner_id.name) if record.owner_id else 'OWN'
+
+        date_str = record.created_date.strftime('%Y%m%d') if record.created_date else 'YYYYMMDD'
+
+        project_type_abbr = {
+            'construction': 'C',
+            'renovation': 'R',
+            'maintenance': 'M',
+            'other': 'O'
+        }.get(record.project_type, 'O')
+
+        record.project_code = f"{architect_abbr}-{contractor_abbr}-{owner_abbr}-{date_str}-{project_type_abbr}"
+
+        return record
+        
     @api.depends('bim_issue_id', 'bim_issue_id.status')
     def _compute_progress(self):
         for project in self:
