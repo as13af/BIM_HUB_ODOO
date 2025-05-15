@@ -1,4 +1,5 @@
 from odoo import models, fields, api, exceptions
+from odoo.exceptions import UserError
 from datetime import timedelta
 
 
@@ -52,6 +53,29 @@ class BIMProject(models.Model):
         string='Progress (%)', compute='_compute_progress',
         store=True, digits=(5, 2)
     )
+
+    approval_1 = fields.Many2one('res.users', string='1st Approval', tracking=True)
+    approval_2 = fields.Many2one('res.users', string='2nd Approval', tracking=True)
+    approval_3 = fields.Many2one('res.users', string='3rd Approval', tracking=True)
+
+    # APPROVAL METHODS (same for all statuses)
+    def action_approve_1(self):
+        self._approve_stage('approval_1')
+
+    def action_approve_2(self):
+        self._approve_stage('approval_2', prev_approval='approval_1')
+
+    def action_approve_3(self):
+        self._approve_stage('approval_3', prev_approval='approval_2')
+
+    # GENERIC APPROVAL LOGIC
+    def _approve_stage(self, approval_field, prev_approval=None):
+        for rec in self:
+            if prev_approval and not rec[prev_approval]:
+                raise UserError(f"Previous approval ({prev_approval.replace('_', ' ')}) is required!")
+            if not rec[approval_field]:
+                rec[approval_field] = self.env.user
+
     @api.model
     def create(self, vals):
         record = super(BIMProject, self).create(vals)
@@ -101,17 +125,41 @@ class BIMProject(models.Model):
             # Default duration of 30 days
             self.end_date = self.start_date + timedelta(days=30)
 
+    # STATUS TRANSITIONS (reset approvals on change)
     def action_set_active(self):
         for rec in self:
+            if rec.status != 'draft':
+                raise UserError("Only draft projects can be activated!")
+            if not (rec.approval_1 and rec.approval_2 and rec.approval_3):
+                raise UserError("All 3 approvals are required to activate!")
             rec.status = 'active'
+            rec._reset_approvals()  # Clear approvals after transition
 
     def action_set_completed(self):
         for rec in self:
+            if rec.status != 'active':
+                raise UserError("Only active projects can be completed!")
+            if not (rec.approval_1 and rec.approval_2 and rec.approval_3):
+                raise UserError("All 3 approvals are required to complete!")
             rec.status = 'completed'
+            rec._reset_approvals()
 
-    def action_archive(self):
+    def action_set_archived(self):
         for rec in self:
+            if rec.status != 'completed':
+                raise UserError("Only completed projects can be archived!")
+            if not (rec.approval_1 and rec.approval_2 and rec.approval_3):
+                raise UserError("All 3 approvals are required to archive!")
             rec.status = 'archived'
+            rec._reset_approvals()
+
+    def _reset_approvals(self):
+        """Reset all approvals after status change."""
+        self.write({
+            'approval_1': False,
+            'approval_2': False,
+            'approval_3': False,
+        })
 
     def export_ifc(self):
         """

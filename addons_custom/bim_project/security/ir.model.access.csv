@@ -1,2 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bim_project_bim_project,bim_project.bim_project,model_bim_project_bim_project,base.group_user,1,1,1,1
+access_bim_project,BIM Project Access,model_bim_project,base.group_user,1,1,1,1
+access_bim_issue,BIM Issue Access,model_bim_issue,base.group_user,1,1,1,1
+access_bim_issue_comment,BIM Issue Comment Access,model_bim_issue_comment,base.group_user,1,1,1,1
+access_bim_document,BIM Document Access,model_bim_document,base.group_user,1,1,1,1
+access_bim_document_comment,BIM Document Comment Access,model_bim_document_comment,base.group_user,1,1,1,1
+access_digital_twin,Digital Twin Access,model_bim_digital_twin,base.group_user,1,1,1,1
+access_digital_twin_viewpoint,Digital Twin Viewpoint Access,model_bim_digital_twin_viewpoint,base.group_user,1,1,1,1

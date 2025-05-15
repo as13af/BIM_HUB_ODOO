@@ -23,6 +23,7 @@
         'views/issue/issue_views.xml',
         'views/issue/issue_comment_views.xml',
         'views/project/project_views.xml',
+        'security/ir.model.access.csv',
         
         # 'views/bim_change_log_views.xml',
         # 'views/bim_cost_estimate_views.xml',

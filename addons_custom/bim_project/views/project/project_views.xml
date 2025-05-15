@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Tree View -->
+    <!-- Tree View (Unchanged) -->
     <record id="view_bim_project_tree" model="ir.ui.view">
         <field name="name">bim.project.tree</field>
         <field name="model">bim.project</field>
@@ -19,7 +19,7 @@
         </field>
     </record>
 
-    <!-- Form View -->
+    <!-- Form View (Updated with Improved Approval Layout) -->
     <record id="view_bim_project_form" model="ir.ui.view">
         <field name="name">bim.project.form</field>
         <field name="model">bim.project</field>
@@ -31,7 +31,7 @@
                             attrs="{'invisible': [('status', '!=', 'draft')]}" class="btn-primary"/>
                     <button name="action_set_completed" type="object" string="Complete"
                             attrs="{'invisible': [('status', '!=', 'active')]}" class="btn-success"/>
-                    <button name="action_archive" type="object" string="Archive"
+                    <button name="action_set_archived" type="object" string="Archive"
                             attrs="{'invisible': [('status', '!=', 'completed')]}" class="btn-default"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,active,completed,archived"/>
                 </header>
@@ -51,17 +51,72 @@
                             <field name="currency_id"/>
                         </group>
                     </group>
-                    <!-- Progress bar right under the title block -->
+                    
+                    <!-- Progress bar -->
                     <div class="o_form_statusbar">
                         <field name="progress" widget="progressbar" options="{'max_value': 100}"/>
                     </div>
+                    
                     <group>
                         <field name="owner_id"/>
                         <field name="contractor_id"/>
                         <field name="architect_id"/>
                         <field name="project_manager_id"/>
                     </group>
+                    <!-- Improved Approval Section -->
+                    <div class="oe_title" attrs="{'invisible': [('status', '=', 'archived')]}">
+                        <h2>Approval Process</h2>
+                    </div>
+                    
+                    <div class="row mb16" attrs="{'invisible': [('status', '=', 'archived')]}">
+                        <!-- First Approval Card -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <strong>First Approval</strong>
+                                </div>
+                                <div class="card-body">
+                                    <field name="approval_1" class="mb8" placeholder="Select approver..." options="{'no_open': True}"/>
+                                    <button name="action_approve_1" string="Approve" type="object"
+                                            attrs="{'invisible': [('approval_1', '!=', False)]}"
+                                            class="btn btn-success mt8"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Second Approval Card -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <strong>Second Approval</strong>
+                                </div>
+                                <div class="card-body">
+                                    <field name="approval_2" class="mb8" placeholder="Select approver..." options="{'no_open': True}"/>
+                                    <button name="action_approve_2" string="Approve" type="object"
+                                            attrs="{'invisible': ['|', ('approval_2', '!=', False), ('approval_1', '=', False)]}"
+                                            class="btn btn-success mt8"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Third Approval Card -->
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <strong>Third Approval</strong>
+                                </div>
+                                <div class="card-body">
+                                    <field name="approval_3" class="mb8" placeholder="Select approver..." options="{'no_open': True}"/>
+                                    <button name="action_approve_3" string="Approve" type="object"
+                                            attrs="{'invisible': ['|', ('approval_3', '!=', False), ('approval_2', '=', False)]}"
+                                            class="btn btn-success mt8"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <notebook>
+                        <!-- Rest of your notebook pages remain unchanged -->
                         <page string="Description">
                             <field name="description"/>
                         </page>
@@ -103,7 +158,7 @@
         </field>
     </record>
 
-    <!-- Kanban View -->
+    <!-- Kanban View (Unchanged) -->
     <record id="view_bim_project_kanban" model="ir.ui.view">
         <field name="name">bim.project.kanban</field>
         <field name="model">bim.project</field>
@@ -135,7 +190,7 @@
         </field>
     </record>
 
-    <!-- Action -->
+    <!-- Action (Unchanged) -->
     <record id="action_bim_project" model="ir.actions.act_window">
         <field name="name">BIM Projects</field>
         <field name="res_model">bim.project</field>
@@ -147,7 +202,7 @@
         </field>
     </record>
 
-    <!-- Menu -->
+    <!-- Menu (Unchanged) -->
     <menuitem id="menu_bim_root" name="BIM Hub Odoo" sequence="10"/>
     <menuitem id="menu_bim_project" name="Projects" parent="menu_bim_root" sequence="1"/>
     <menuitem id="menu_bim_project_main"
