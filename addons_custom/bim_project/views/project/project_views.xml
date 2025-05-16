@@ -50,6 +50,11 @@
                             <field name="budget"/>
                             <field name="currency_id"/>
                         </group>
+                        <group>
+                        <field name="is_approved_1" invisible="1"/>
+                        <field name="is_approved_2" invisible="1"/>
+                        <field name="is_approved_3" invisible="1"/>
+                        </group>
                     </group>
                     
                     <!-- Progress bar -->
@@ -67,8 +72,9 @@
                     <div class="oe_title" attrs="{'invisible': [('status', '=', 'archived')]}">
                         <h2>Approval Process</h2>
                     </div>
-                    
+
                     <div class="row mb16" attrs="{'invisible': [('status', '=', 'archived')]}">
+
                         <!-- First Approval Card -->
                         <div class="col-md-4">
                             <div class="card">
@@ -78,7 +84,7 @@
                                 <div class="card-body">
                                     <field name="approval_1" class="mb8" placeholder="Select approver..." options="{'no_open': True}"/>
                                     <button name="action_approve_1" string="Approve" type="object"
-                                            attrs="{'invisible': [('approval_1', '!=', False)]}"
+                                            attrs="{'invisible': ['|', ('is_approved_1', '=', True), ('approval_1', '=', False)]}"
                                             class="btn btn-success mt8"/>
                                 </div>
                             </div>
@@ -93,7 +99,7 @@
                                 <div class="card-body">
                                     <field name="approval_2" class="mb8" placeholder="Select approver..." options="{'no_open': True}"/>
                                     <button name="action_approve_2" string="Approve" type="object"
-                                            attrs="{'invisible': ['|', ('approval_2', '!=', False), ('approval_1', '=', False)]}"
+                                            attrs="{'invisible': ['|', ('is_approved_2', '=', True), '|', ('approval_2', '=', False), ('is_approved_1', '!=', True)]}"
                                             class="btn btn-success mt8"/>
                                 </div>
                             </div>
@@ -108,12 +114,14 @@
                                 <div class="card-body">
                                     <field name="approval_3" class="mb8" placeholder="Select approver..." options="{'no_open': True}"/>
                                     <button name="action_approve_3" string="Approve" type="object"
-                                            attrs="{'invisible': ['|', ('approval_3', '!=', False), ('approval_2', '=', False)]}"
+                                            attrs="{'invisible': ['|', ('is_approved_3', '=', True), '|', ('approval_3', '=', False), ('is_approved_2', '!=', True)]}"
                                             class="btn btn-success mt8"/>
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                     
                     <notebook>
                         <!-- Rest of your notebook pages remain unchanged -->

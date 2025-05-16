@@ -58,23 +58,31 @@ class BIMProject(models.Model):
     approval_2 = fields.Many2one('res.users', string='2nd Approval', tracking=True)
     approval_3 = fields.Many2one('res.users', string='3rd Approval', tracking=True)
 
+    is_approved_1 = fields.Boolean(string="1st Approval Done", tracking=True)
+    is_approved_2 = fields.Boolean(string="2nd Approval Done", tracking=True)
+    is_approved_3 = fields.Boolean(string="3rd Approval Done", tracking=True)
+
     # APPROVAL METHODS (same for all statuses)
     def action_approve_1(self):
-        self._approve_stage('approval_1')
+        self._approve_stage('approval_1', 'is_approved_1')
 
     def action_approve_2(self):
-        self._approve_stage('approval_2', prev_approval='approval_1')
+        self._approve_stage('approval_2', 'is_approved_2', prev_approval='approval_1', prev_approved='is_approved_1')
 
     def action_approve_3(self):
-        self._approve_stage('approval_3', prev_approval='approval_2')
+        self._approve_stage('approval_3', 'is_approved_3', prev_approval='approval_2', prev_approved='is_approved_2')
+
 
     # GENERIC APPROVAL LOGIC
-    def _approve_stage(self, approval_field, prev_approval=None):
+    def _approve_stage(self, approval_field, approved_flag, prev_approval=None, prev_approved=None):
         for rec in self:
             if prev_approval and not rec[prev_approval]:
                 raise UserError(f"Previous approval ({prev_approval.replace('_', ' ')}) is required!")
+            if prev_approved and not rec[prev_approved]:
+                raise UserError(f"Previous approval stage is not yet confirmed!")
             if not rec[approval_field]:
                 rec[approval_field] = self.env.user
+            rec[approved_flag] = True
 
     @api.model
     def create(self, vals):
@@ -125,21 +133,21 @@ class BIMProject(models.Model):
             # Default duration of 30 days
             self.end_date = self.start_date + timedelta(days=30)
 
-    # STATUS TRANSITIONS (reset approvals on change)
+    # Status Transitions
     def action_set_active(self):
         for rec in self:
             if rec.status != 'draft':
                 raise UserError("Only draft projects can be activated!")
-            if not (rec.approval_1 and rec.approval_2 and rec.approval_3):
+            if not (rec.is_approved_1 and rec.is_approved_2 and rec.is_approved_3):
                 raise UserError("All 3 approvals are required to activate!")
             rec.status = 'active'
-            rec._reset_approvals()  # Clear approvals after transition
+            rec._reset_approvals()
 
     def action_set_completed(self):
         for rec in self:
             if rec.status != 'active':
                 raise UserError("Only active projects can be completed!")
-            if not (rec.approval_1 and rec.approval_2 and rec.approval_3):
+            if not (rec.is_approved_1 and rec.is_approved_2 and rec.is_approved_3):
                 raise UserError("All 3 approvals are required to complete!")
             rec.status = 'completed'
             rec._reset_approvals()
@@ -148,17 +156,20 @@ class BIMProject(models.Model):
         for rec in self:
             if rec.status != 'completed':
                 raise UserError("Only completed projects can be archived!")
-            if not (rec.approval_1 and rec.approval_2 and rec.approval_3):
+            if not (rec.is_approved_1 and rec.is_approved_2 and rec.is_approved_3):
                 raise UserError("All 3 approvals are required to archive!")
             rec.status = 'archived'
             rec._reset_approvals()
 
     def _reset_approvals(self):
-        """Reset all approvals after status change."""
+        """Reset all approvals and flags after status change."""
         self.write({
             'approval_1': False,
             'approval_2': False,
             'approval_3': False,
+            'is_approved_1': False,
+            'is_approved_2': False,
+            'is_approved_3': False,
         })
 
     def export_ifc(self):
